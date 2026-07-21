@@ -242,14 +242,7 @@ const uint8_t TAG_ADDR[] = { 'T', '1' };
 #define tmp_password  "PASSWORD"
 ```
 
-#### Multi-Tag Settings
 
-```cpp
-// Time slot duration per Tag (ms)
-unsigned long slotDuration = 30;
-
-// Enable time-division mode (must be true when totalTags > 1)
-#define window_mode true
 ```
 
 | Parameter | Description |
@@ -322,52 +315,6 @@ self.distance_A1_A2 = 2.0
 
 ---
 
-### 2D_3D_position_display_res_jitter_ns.py
-
-> Displays a `2D top view` and a `3D view` simultaneously, and automatically exports statistical plots for three key performance metrics: `Residual`, `Jitter`, and `Latency`.
-
-#### Configuration
-```python
-CONFIG = {
-    "ENABLE_STATS_EXPORT": True,   # Enable statistical export
-    "SHOW_CLOUD_POINTS": True,     # Initial state: show historical path cloud
-    "SHOW_RAW_POINTS": True,       # Initial state: show raw measurement points
-    "SHOW_PREDICT_POINTS": False,  # Initial state: show EKF predictions & trail
-    "TARGET_SAMPLES": 1000,        # Auto-save after this many samples
-}
-```
-
-#### Anchor Coordinates
-```python
-self.anchors = {
-    'A1': (0.0, 0.0, 0.0),       # Origin
-    'A2': (2.0, 0.0, 0.0),       # X-axis
-    'A3': (1.0, 1.732, 0.0),     # Equilateral triangle vertex
-    'A4': (1.0, 0.0, 0.4),       # Z-axis (for 3D positioning)
-}
-```
-
-**`Features`**
-- **Dual-view synchronous display**: Left 2D top view + right 3D view
-- **Multi-Tag tracking**: Supports up to 4 Tags (T1 ~ T4) simultaneously, each with a distinct color
-- **3D 4-Anchor positioning**: Solves 3D coordinates via least squares (LSTSQ); requires at least 4 Anchors
-- **Historical path cloud**: Accumulates all historical raw points
-- **Performance metric export**: Automatically saves `Residual`, `Jitter`, and `Latency` plots when `TARGET_SAMPLES` is reached
-
-**`Button Controls`**
-| Button | Function |
-| :--- | :--- |
-| `Rotate` | Toggle automatic 3D view rotation |
-| `Cloud` | Toggle historical path cloud display |
-| `Raw` | Toggle raw measurement point display |
-| `EKF` | Toggle EKF prediction point & trail display |
-
-**`Exported Charts`**
-| Chart | X-axis | Y-axis | Meaning |
-| :--- | :--- | :--- | :--- |
-| Residual | Sample index | Positioning residual (m) | How well raw points match Anchor distance circles; smaller = more accurate |
-| Jitter | Sample index | Consecutive displacement (m) | Displacement between consecutive raw points; smaller = smoother trajectory |
-| Latency | Sample index | Transmission latency (ns) | Round-trip time per ranging cycle; reflects system responsiveness |
 
 ---
 
