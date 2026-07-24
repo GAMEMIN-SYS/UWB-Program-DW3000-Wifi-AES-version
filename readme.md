@@ -11,7 +11,6 @@
 
 [![English](https://img.shields.io/badge/Language-English-blue)](README.md) 
 [![繁體中文](https://img.shields.io/badge/Language-繁體中文-green)](README.zh-TW.md)
-[![日本語](https://img.shields.io/badge/Language-日本語-red)](README.ja.md)
 
 ---
 
@@ -54,7 +53,6 @@ This project uses the `DW3000 UWB module` together with `Arduino`, `Python`, and
 ## 🌳 Directory Tree
 ```bash
 📂 UWB_Program_DW3000
-┣ 📂 PriUint64        # uint64 printing utility library (debug)
 ┣ 📂 DW3000           # UWB hardware driver library
 ┃  ┣ 📝 dw3000.h                     # Main include header
 ┃  ┣ 📝 dw3000_types.h               # Data type definitions
@@ -83,9 +81,8 @@ This project uses the `DW3000 UWB module` together with `Arduino`, `Python`, and
 ┣ 📂 Tag_Encryption
 ┃  ┗ 📟 Tag_Encryption.ino     # Tag firmware (transmitter)
 ┣ 
-┣ 🐍 2D_3D_position_display_res_jitter_ns.py  # 2D/3D positioning + residual/jitter/latency plots
-┣ 🐍 2D_position_display.py                   # 2D positioning display
-┣ 🐍 Draw_dis_ns.py                           # Distance/latency plot
+┣ 🐍 2D_position_display.py    # 2D positioning display
+┣ 🐍 Draw_dis_ns.py            # Distance/latency plot
 ┃
 ┣ 🐍 Draw_res_jitter_ns.py  # Multi-Tag residual/jitter/latency comparison
 ┣ 🐍 Positioning.py         # Field layout diagram
@@ -95,7 +92,8 @@ This project uses the `DW3000 UWB module` together with `Arduino`, `Python`, and
 ┃
 ┣ 📝 README.md         # Documentation (English)
 ┣ 📝 README.zh-TW.md   # Documentation (Traditional Chinese)
-┗ 📋 requirements.txt  # All required Python packages
+┣ 📋 requirements.txt  # All required Python packages
+┗ 📝 LICENSE
 ```
 
 ---
@@ -116,7 +114,7 @@ Install the USB driver: https://www.silabs.com/software-and-tools/usb-to-uart-br
 
 ### 2. Arduino Setup
 
-Copy the `DW3000` and `PriUint64` folders into the `libraries` folder:
+Copy the `DW3000` folders into the `libraries` folder:
 ```bash
  .\Arduino\libraries 
 ```
@@ -242,7 +240,14 @@ const uint8_t TAG_ADDR[] = { 'T', '1' };
 #define tmp_password  "PASSWORD"
 ```
 
+#### Multi-Tag Settings
 
+```cpp
+// Time slot duration per Tag (ms)
+unsigned long slotDuration = 30;
+
+// Enable time-division mode (must be true when totalTags > 1)
+#define window_mode true
 ```
 
 | Parameter | Description |
@@ -315,9 +320,6 @@ self.distance_A1_A2 = 2.0
 
 ---
 
-
----
-
 ### Draw_dis_ns.py 
 
 > Reads ranging data from the serial port in real-time and plots `Distance` and `Latency` charts.
@@ -340,59 +342,6 @@ encryption = 'AES_'        # Encryption mode prefix (non- / STS_ / AES_ / AES+ST
 
 ---
 
-### Draw_res_jitter_ns.py
-
-> Manually input `Residual`, `Jitter`, and `Latency` data for multiple Tags under different encryption modes to generate comparison charts.
-
-#### Data Input
-```python
-data = {
-    'Tags':     [1, 2, 2, 3, 3, 3, 4, 4, 4, 4],
-    'Residual': [0.0164, 0.0171, 0.0197, 0.0196, 0.0194, 0.0517, 0.0336, 0.0200, 0.0783, 0.0880],
-    'Jitter':   [0.0336, 0.0485, 0.0332, 0.0386, 0.0322, 0.0724, 0.0410, 0.0341, 0.1503, 0.0966],
-    'Latency':  [2.29, 2.30, 2.29, 2.30, 2.33, 2.34, 2.34, 2.35, 2.37, 2.31]
-}
-```
-
-#### Display Mode
-```python
-section = 0  # 0 = single chart mode, 1 = comparison mode
-choose  = 0  # 0 = unencrypted data, 1 = encrypted data
-```
-
-| `section` | `choose` | Output |
-| :---: | :---: | :---: |
-| `0` | `0` | ![non-encryption](Draw_Error_Images/markdown_image/未加密.png) |
-| `0` | `1` | ![encryption](Draw_Error_Images/markdown_image/AES加密.png) |
-| `1` | `any` | ![both](Draw_Error_Images/markdown_image/未加密_AES加密.png) |
-
----
-
-### Positioning\.py
-
-> Draws a `3D field layout diagram` based on Anchor and Tag coordinates.
-
-#### Anchor Coordinates
-```python
-anchors = {
-    'Anchor 1': [0.00, 0.00, 0.00],    # (x, y, z) in meters
-    'Anchor 2': [2.00, 0.00, 0.00],
-    'Anchor 3': [1.00, 1.73, 0.00],
-    'Anchor 4': [1.00, 0.00, 0.50]
-}
-```
-
-#### Tag Display Setting
-```python
-Add_Tag = True   # False | True
-```
-
-| `Add_Tag` | Output |
-| :---: | :---: |
-| `False` | ![no Tag](Draw_Error_Images/markdown_image/3D_Layout.png) |
-| `True` | ![Tag](Draw_Error_Images/markdown_image/3D_Layout_with_1tag.png) |
-
----
 
 ## 🐍 Python Packet Tools
 
